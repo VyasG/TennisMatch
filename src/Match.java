@@ -76,20 +76,21 @@ public final class Match {
             player1.incrementTieBreakerPoint();
         else
             player2.incrementTieBreakerPoint();
+
         //Check for who
         if (abs(player1.getTieBreakerPoint() - player2.getTieBreakerPoint()) == leadingTieBreakerPoints) {
             //game finished
             if ((player1.getTieBreakerPoint() - player2.getTieBreakerPoint()) == leadingTieBreakerPoints) {
-                player1.incrementGamesWon();
                 player1.incrementSetsWon();
-                player1.resetGame();
             } else {
-                player2.incrementGamesWon();
                 player2.incrementSetsWon();
-                player2.resetGame();
             }
+            //set won reset all data
+            player1.resetGame();
+            player2.resetGame();
+            player1.resetGamesWon();
+            player2.resetGamesWon();
         }
-
 
     }
 
@@ -111,9 +112,19 @@ public final class Match {
             if (player1.getGamesWon() >= minimumRequiredGames)
             {
                 player1.incrementSetsWon();
+                //reset for next set
+                player1.resetGamesWon();
+                player2.resetGamesWon();
             }
             else if(player2.getGamesWon() >= minimumRequiredGames)
+            {
                 player2.incrementSetsWon();
+                //reset for next set
+                player1.resetGamesWon();
+                player2.resetGamesWon();
+            }
+
+
         }
     }
 

@@ -74,6 +74,14 @@ public class Player {
     }
 
     /**
+     * resetGamesWon
+     */
+    public void resetGamesWon()
+    {
+      this.gamesWon = 0;
+    }
+
+    /**
      * getNextPoint method calculates and return next scored point for the player based on other players point scores in a game
      * @param otherPlayer Other player in the Match
      * @return Point scored by the player
