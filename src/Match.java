@@ -4,7 +4,7 @@ import static java.lang.Math.abs;
  * Match class implements external methods to access score
  */
 
-public class Match {
+public final class Match {
 
     private Player player1;
     private Player player2;
@@ -31,7 +31,7 @@ public class Match {
     {
         //Check for tie breaker as it has different rules for scoring
         if (checkTieBreakerCondition()) {
-            calculateTieBreaker(pName);
+            calculateTieBreakerScore(pName);
         } else {
             calculateGameScore(pName);
         }
@@ -67,7 +67,7 @@ public class Match {
      * calculateTieBreaker - calculates score when set is in tie breaker
      * @param pName Name of the player
      */
-    private void calculateTieBreaker(String pName)
+    private void calculateTieBreakerScore(String pName)
     {
         //its a tie breaker
 
