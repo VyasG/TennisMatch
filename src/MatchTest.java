@@ -4,6 +4,7 @@
 public class MatchTest {
 
     public static void main(String[] args) {
+        //Execute test assertions
         testDeuce();
         testAdvantage();
         testTieBreaker();
@@ -99,15 +100,10 @@ public class MatchTest {
 
         match.pointWonBy("Player1");
         match.pointWonBy("Player1");
-        System.out.println(match.score());
         match.pointWonBy("Player2");
-        System.out.println(match.score());
         match.pointWonBy("Player2");
-        System.out.println(match.score());
         match.pointWonBy("Player1");
-        System.out.println(match.score());
         match.pointWonBy("Player1");
-        System.out.println(match.score());
         match.pointWonBy("Player1");
         System.out.println(match.score());
         assert match.score().equals("\"0-0, 15-0\"") : "method fail testNewGame";
