@@ -44,7 +44,13 @@ public class Match {
      */
     public String score()
     {
-        return null;
+        String displayScore = String.format("\"%d-%d, %s\"",player1.getSetsWon(),player2.getSetsWon(),getGameScore() );
+
+        //Format score when atleast one set is won and Game is paused or no more points are scored yet.
+        if(player1.getSetsWon()!=0 ||player2.getSetsWon() !=0 && (player1.getGamePoint()==Point.ZERO && player2.getGamePoint() ==Point.ZERO))
+            displayScore = String.format("\"%d-%d\"",player1.getSetsWon(),player2.getSetsWon());
+
+        return displayScore;
     }
 
 
@@ -109,6 +115,30 @@ public class Match {
             else if(player2.getGamesWon() >= minimumRequiredGames)
                 player2.incrementSetsWon();
         }
+    }
+
+    /**
+     * getGameScore is private method to format the game output.
+     * @return String formatted for display
+     */
+    private String getGameScore()
+    {
+        Point player1Point = player1.getGamePoint();
+        Point player2Point = player2.getGamePoint();
+        String displayGameScore = String.format("%s-%s",player1Point.getValue(), player2Point.getValue());
+        if(checkTieBreakerCondition()) {
+            displayGameScore = String.format("%d-%d", player1.getTieBreakerPoint(), player2.getTieBreakerPoint());
+        }
+        //change display based on specials cons
+        if(player1Point==Point.ADVANTAGE)
+            displayGameScore= String.format("%s %s", Point.ADVANTAGE.getValue(), player1.getName());
+        if(player2Point == Point.ADVANTAGE)
+            displayGameScore= String.format("%s %s", Point.ADVANTAGE.getValue(), player2.getName());
+        if(player1Point==player2Point) {
+            if (player1Point == Point.FORTY)
+                displayGameScore = String.format("%s", "Deuce");
+        }
+        return displayGameScore;
     }
 
 
