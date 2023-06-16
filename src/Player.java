@@ -18,6 +18,10 @@ public class Player {
     }
 
     //Getter, setter and incrementers
+    public String getName() {
+        return name;
+    }
+
     //Register games win
     public void incrementGamesWon()
     {

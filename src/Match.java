@@ -1,3 +1,5 @@
+import static java.lang.Math.abs;
+
 /**
  * Match class implements external methods to access score
  */
@@ -27,6 +29,12 @@ public class Match {
      */
     public void pointWonBy(String pName)
     {
+        //Check for tie breaker as it has different rules for scoring
+        if (checkTieBreakerCondition()) {
+            calculateTieBreaker(pName);
+        } else {
+            calculateGameScore(pName);
+        }
 
     }
 
@@ -37,6 +45,70 @@ public class Match {
     public String score()
     {
         return null;
+    }
+
+
+    /**
+     * checkTieBreaker  method perform precondition check for tieBreaker
+     * @return true if tiebreaker condition of  minimum number games has been won by each player
+     * */
+    private boolean checkTieBreakerCondition()
+    {
+        return ( player1.getGamesWon() == minimumRequiredGames && player2.getGamesWon()==minimumRequiredGames );
+    }
+
+    /**
+     * calculateTieBreaker - calculates score when set is in tie breaker
+     * @param pName Name of the player
+     */
+    private void calculateTieBreaker(String pName)
+    {
+        //its a tie breaker
+
+        //Choose player and increment, assume valid data
+        if (player1.getName().equals(pName))
+            player1.incrementTieBreakerPoint();
+        else
+            player2.incrementTieBreakerPoint();
+        //Check for who
+        if (abs(player1.getTieBreakerPoint() - player2.getTieBreakerPoint()) == leadingTieBreakerPoints) {
+            //game finished
+            if ((player1.getTieBreakerPoint() - player2.getTieBreakerPoint()) == leadingTieBreakerPoints) {
+                player1.incrementGamesWon();
+                player1.incrementSetsWon();
+                player1.resetGame();
+            } else {
+                player2.incrementGamesWon();
+                player2.incrementSetsWon();
+                player2.resetGame();
+            }
+        }
+
+
+    }
+
+    /**
+     * calculateGameScore method deduces the score for game and set and  updates players point, game and set data
+     * @param pName Name of the player
+     */
+    private void calculateGameScore( String pName)
+    {
+        //Choose player and increment, assume valid player name per instructions
+        if(player1.getName().equals(pName))
+            player1.setGamePoint(player1.getNextPoint(player2));
+        else
+            player2.setGamePoint(player2.getNextPoint(player1));
+
+        //Check for games won and set the data for sets
+        if( abs(player1.getGamesWon() -player2.getGamesWon()) >=leadingGames )
+        {
+            if (player1.getGamesWon() >= minimumRequiredGames)
+            {
+                player1.incrementSetsWon();
+            }
+            else if(player2.getGamesWon() >= minimumRequiredGames)
+                player2.incrementSetsWon();
+        }
     }
 
 
