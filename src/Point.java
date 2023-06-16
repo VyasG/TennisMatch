@@ -1,5 +1,6 @@
 /**
  * Point used in a normal tennis game scoring, e.g. 0,15,30,40, Advantage and Win.
+ * Tiebreaker scoring is simple increment
  */
 public enum Point {
     ZERO("0"),
