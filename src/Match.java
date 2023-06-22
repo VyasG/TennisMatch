@@ -11,6 +11,7 @@ public final class Match {
     private final int minimumRequiredGames = 6;
     private final int leadingGames = 2;
     private final int leadingTieBreakerPoints = 2;
+    private final int minimumTieBreakerPoints = 7;
 
     /**
      * Constructor
@@ -29,6 +30,10 @@ public final class Match {
      */
     public void pointWonBy(String pName)
     {
+        //Do not score if set is complete
+        if(player1.getSetsWon()>0 || player2.getSetsWon()>0)
+            return;
+
         //Check for tie breaker as it has different rules for scoring
         if (checkTieBreakerCondition()) {
             calculateTieBreakerScore(pName);
@@ -38,17 +43,20 @@ public final class Match {
 
     }
 
+
+
     /**
      * score method formats and returns the display string for Set and current game
      * @return Formatted display score string
      */
     public String score()
     {
-        String displayScore = String.format("\"%d-%d, %s\"",player1.getSetsWon(),player2.getSetsWon(),getGameScore() );
 
-        //Format score when atleast one set is won and Game is paused or no more points are scored yet.
-        if(player1.getSetsWon()!=0 ||player2.getSetsWon() !=0 && (player1.getGamePoint()==Point.ZERO && player2.getGamePoint() ==Point.ZERO))
-            displayScore = String.format("\"%d-%d\"",player1.getSetsWon(),player2.getSetsWon());
+        String displayScore = String.format("\"%d-%d, %s\"",player1.getGamesWon(),player2.getGamesWon(),getGameScore() );
+
+        //Format score when atleast one game is won and Game is paused or no more points are scored yet.
+            if((player1.getGamesWon()!=0 ||player2.getGamesWon() !=0) && (player1.getGamePoint()==Point.ZERO && player2.getGamePoint() ==Point.ZERO))
+            displayScore = String.format("\"%d-%d\"",player1.getGamesWon(),player2.getGamesWon());
 
         return displayScore;
     }
@@ -77,19 +85,22 @@ public final class Match {
         else
             player2.incrementTieBreakerPoint();
 
-        //Check for who
-        if (abs(player1.getTieBreakerPoint() - player2.getTieBreakerPoint()) == leadingTieBreakerPoints) {
+        //Check for who won the tiebreaker
+        if ((abs(player1.getTieBreakerPoint() - player2.getTieBreakerPoint()) >= leadingTieBreakerPoints)
+         &&((player1.getTieBreakerPoint()>=minimumTieBreakerPoints)||(player2.getTieBreakerPoint()>=minimumTieBreakerPoints)))
+        {
             //game finished
+
             if ((player1.getTieBreakerPoint() - player2.getTieBreakerPoint()) == leadingTieBreakerPoints) {
+                player1.incrementGamesWon();
                 player1.incrementSetsWon();
             } else {
+                player2.incrementGamesWon();
                 player2.incrementSetsWon();
             }
-            //set won reset all data
+            //Only reset game data , needn't check the
             player1.resetGame();
             player2.resetGame();
-            player1.resetGamesWon();
-            player2.resetGamesWon();
         }
 
     }
@@ -109,19 +120,13 @@ public final class Match {
         //Check for games won and set the data for sets
         if( abs(player1.getGamesWon() -player2.getGamesWon()) >=leadingGames )
         {
-            if (player1.getGamesWon() >= minimumRequiredGames)
-            {
+            if (player1.getGamesWon() >= minimumRequiredGames)            {
+
                 player1.incrementSetsWon();
-                //reset for next set
-                player1.resetGamesWon();
-                player2.resetGamesWon();
             }
-            else if(player2.getGamesWon() >= minimumRequiredGames)
-            {
+            else if(player2.getGamesWon() >= minimumRequiredGames)            {
+
                 player2.incrementSetsWon();
-                //reset for next set
-                player1.resetGamesWon();
-                player2.resetGamesWon();
             }
 
 

@@ -10,6 +10,7 @@ public class MatchTest {
         testTieBreaker();
         testNewGame();
         testSetComplete();
+        testExampleOutput();
     }
 
     //Test
@@ -56,8 +57,6 @@ public class MatchTest {
     {
         int minGamesSet = 5;
         Match match = new Match("Player1","Player2");
-        //{ match.pointWonBy("Player1");})
-
 
         for (int i=0;i<minGamesSet;i++)
         {
@@ -85,9 +84,15 @@ public class MatchTest {
         match.pointWonBy("Player2");
         match.pointWonBy("Player1");
         match.pointWonBy("Player2");
+        //
+        match.pointWonBy("Player2");
+        match.pointWonBy("Player2");
+        match.pointWonBy("Player2");
+        match.pointWonBy("Player2");
+        match.pointWonBy("Player2");
 
         System.out.println(match.score());
-        assert match.score().equals("\"0-0, 1-2\"") : "method fail testTieBreaker";
+        assert match.score().equals("\"6-7\"") : "method fail testTieBreaker";
 
     }
 
@@ -106,12 +111,12 @@ public class MatchTest {
         match.pointWonBy("Player1");
         match.pointWonBy("Player1");
         System.out.println(match.score());
-        assert match.score().equals("\"0-0, 15-0\"") : "method fail testNewGame";
+        assert match.score().equals("\"1-0, 15-0\"") : "method fail testNewGame";
 
     }
 
     /**
-     * Method to test when a set is complete, this game only has one set
+     * Method to test when a set is complete, this match only has one set
      */
     private static void testSetComplete()
     {
@@ -123,9 +128,51 @@ public class MatchTest {
             match.pointWonBy("Player2");
             match.pointWonBy("Player2");
         }
-        System.out.println(match.score());
-        assert match.score().equals("\"0-1\"") : "method fail testSetComplete";
 
+        System.out.println(match.score());
+        //this loop shouldn't be scored
+        for (int i=0;i<6;i++)
+        {
+            match.pointWonBy("Player2");
+            match.pointWonBy("Player2");
+            match.pointWonBy("Player2");
+            match.pointWonBy("Player2");
+        }
+        System.out.println(match.score());
+        assert match.score().equals("\"0-6\"") : "method fail testSetComplete";
+
+    }
+
+    private static void testExampleOutput()
+    {
+        Match match = new Match("player 1","player 2");
+        match.pointWonBy("player 1");
+        match.pointWonBy("player 2");
+        // this will return "0-0, 15-15"
+        //match.score();
+        System.out.println(match.score());
+
+        match.pointWonBy("player 1");
+        match.pointWonBy("player 1");
+
+// this will return "0-0, 40-15"
+        System.out.println(match.score());
+
+        match.pointWonBy("player 2");
+        match.pointWonBy("player 2");
+
+// this will return "0-0, Deuce"
+        System.out.println(match.score());
+
+        match.pointWonBy("player 1");
+
+// this will return "0-0, Advantage player 1"
+        System.out.println(match.score());
+
+        match.pointWonBy("player 1");
+
+// this will return "1-0"
+        System.out.println(match.score());
     }
 
 
